@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html
+lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeeves — Propuesta · Sodimac</title>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:   #0A0A0C;
+      --black-2: #111116;
+      --black-3: #18181F;
+      --black-4: #22222B;
+      --gold:        #C9A84C;
+      --gold-light:  #E2C97E;
+      --gold-dim:    rgba(201,168,76,0.10);
+      --gold-border: rgba(201,168,76,0.22);
+      --pacific:        #51ACBC;
+      --pacific-dim:    rgba(81,172,188,0.10);
+      --pacific-border: rgba(81,172,188,0.22);
+      --green:     #4ABCA0;
+      --green-dim: rgba(74,188,160,0.10);
+      --amber:     #D4914A;
+      --amber-dim: rgba(212,145,74,0.10);
+      --red:       #E05555;
+      --text-primary:   #F0EDE6;
+      --text-secondary: #9A9690;
+      --text-muted:     #5A5755;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Urbanist', -apple-system, sans-serif;
+      background: var(--black);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(10,10,12,0.90);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--black-4);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-wordmark { font-size: 20px; font-weight: 800; letter-spacing: 0.04em; }
+    .nav-pill {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      color: var(--gold); padding: 4px 12px; border-radius: 999px;
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute;
+      top: -100px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(201,168,76,0.13) 0%, transparent 58%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); background: var(--gold-dim); border: 1px solid var(--gold-border);
+      padding: 6px 18px; border-radius: 999px; margin-bottom: 28px; display: inline-block;
+    }
+    .hero h1 {
+      font-size: clamp(46px, 8vw, 92px); font-weight: 900; line-height: 0.95;
+      letter-spacing: -0.03em; margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 60%, var(--pacific) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 19px); color: var(--text-secondary);
+      max-width: 540px; line-height: 1.7; margin-bottom: 52px;
+    }
+    .hero-card-wrap { perspective: 1000px; margin-bottom: 52px; width: 100%; display: flex; justify-content: center; }
+    .hero-card {
+      width: min(380px, 100%); height: auto; min-height: 200px;
+      background: linear-gradient(135deg, #1c1c28 0%, #111116 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: 22px; padding: 28px 32px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.08);
+      transform: perspective(900px) rotateX(6deg) rotateY(-6deg);
+      transition: transform 0.5s ease;
+    }
+    .hero-card:hover { transform: perspective(900px) rotateX(0deg) rotateY(0deg); }
+    .hero-card::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(201,168,76,0.14) 0%, transparent 65%);
+    }
+    .hc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .hc-logo { display: flex; align-items: center; gap: 8px; }
+    .hc-logo-text { font-size: 13px; font-weight: 800; letter-spacing: 0.08em; color: rgba(240,237,230,0.5); }
+    .hc-chip { width: 38px; height: 28px; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); border-radius: 5px; }
+    .hc-num { font-size: 16px; font-weight: 500; letter-spacing: 0.22em; color: rgba(240,237,230,0.5); margin-bottom: 20px; }
+    .hc-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .hc-name { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-primary); }
+    .hc-label-small { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+    .hc-tag {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      color: var(--gold); padding: 4px 10px; border-radius: 6px;
+    }
+    .hero-stats { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .hstat {
+      background: var(--black-2); border: 1px solid var(--black-4);
+      border-radius: 14px; padding: 18px 26px; text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .hstat:hover { border-color: var(--gold-border); transform: translateY(-3px); }
+    .hstat-num { font-size: 30px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .hstat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 5px; }
+
+    /* ── SECTION ── */
+    .section { padding: 96px 24px; border-top: 1px solid var(--black-4); }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 8px; }
+    .section-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .section-h { font-size: clamp(30px, 4.5vw, 52px); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 14px; }
+    .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 520px; margin-bottom: 56px; }
+
+    /* ── SCROLL HINT ── */
+    .scroll-hint {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted); animation: bounce 2s infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    /* ── PRICING TIERS ── */
+    .tier-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    @media(max-width:900px){ .tier-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:500px){ .tier-grid { grid-template-columns: 1fr; } }
+
+    .tier-card {
+      background: var(--black-2); border: 1px solid var(--black-4);
+      border-radius: 20px; padding: 28px 24px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .tier-card::after {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 180px; height: 180px; border-radius: 50%; pointer-events: none;
+    }
+    .tier-card.t1::after { background: radial-gradient(circle, rgba(81,172,188,0.08) 0%, transparent 70%); }
+    .tier-card.t2::after { background: radial-gradient(circle, rgba(74,188,160,0.08) 0%, transparent 70%); }
+    .tier-card.t3::after { background: radial-gradient(circle, rgba(212,145,74,0.08) 0%, transparent 70%); }
+    .tier-card.t4::after { background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); }
+    .tier-card.t4 { border-color: var(--gold-border); }
+    .tier-card.t4.active-tier { background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.03) 100%); }
+    .tier-card.active-tier { border-color: var(--gold-border); }
+
+    .tier-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 999px; display: inline-block; margin-bottom: 16px;
+    }
+    .t1 .tier-badge { background: var(--pacific-dim); color: var(--pacific); border: 1px solid var(--pacific-border); }
+    .t2 .tier-badge { background: var(--green-dim); color: var(--green); border: 1px solid rgba(74,188,160,0.22); }
+    .t3 .tier-badge { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(212,145,74,0.22); }
+    .t4 .tier-badge { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold-border); }
+
+    .tier-users { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.4; }
+    .tier-price-mxn { font-size: 32px; font-weight: 900; line-height: 1; letter-spacing: -0.02em; color: var(--text-primary); }
+    .tier-price-unit { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 4px; margin-bottom: 8px; }
+    .tier-price-usd { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+
+    .tier-ff {
+      margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--black-4);
+      font-size: 12px; color: var(--text-muted);
+    }
+    .tier-ff strong { color: var(--pacific); }
+
+    .active-tier-indicator {
+      position: absolute; top: 16px; right: 16px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); display: none;
+      box-shadow: 0 0 8px rgba(74,188,160,0.6);
+      animation: pulse 1.5s infinite;
+    }
+    .active-tier .active-tier-indicator { display: block; }
+
+    /* ── FOTO FACTURAS PACKAGES ── */
+    .ff-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    @media(max-width:600px){ .ff-grid { grid-template-columns: 1fr; } }
+    .ff-card {
+      background: var(--black-2); border: 1px solid var(--black-4);
+      border-radius: 16px; padding: 22px 20px;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative; cursor: pointer;
+    }
+    .ff-card:hover { border-color: var(--pacific-border); transform: translateY(-3px); }
+    .ff-card.ff-active { border-color: var(--pacific-border); background: var(--pacific-dim); }
+    .ff-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .ff-included { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    .ff-price-mxn { font-size: 26px; font-weight: 900; color: var(--pacific); line-height: 1; }
+    .ff-price-detail { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .ff-discount { font-size: 10px; font-weight: 700; background: rgba(74,188,160,0.1); color: var(--green); border: 1px solid rgba(74,188,160,0.2); padding: 2px 8px; border-radius: 999px; display: inline-block; margin-top: 10px; }
+
+    /* ── CALCULATOR ── */
+    .calc-wrapper {
+      background: var(--black-2); border: 1px solid var(--black-4);
+      border-radius: 24px; overflow: hidden;
+    }
+    .calc-header {
+      background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(81,172,188,0.04) 100%);
+      border-bottom: 1px solid var(--black-4);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .calc-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+    .calc-subtitle { font-size: 12px; color: var(--text-muted); }
+    .calc-subtitle span { color: var(--gold); font-weight: 700; }
+
+    .tdc-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--black-3); border: 1px solid var(--gold-border);
+      border-radius: 12px; padding: 10px 16px;
+    }
+    .tdc-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+    .tdc-input {
+      background: none; border: none; outline: none;
+      font-family: 'Urbanist', sans-serif; font-size: 20px; font-weight: 800;
+      color: var(--gold); width: 120px; text-align: right;
+    }
+    .tdc-suffix { font-size: 11px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+
+    .calc-body { display: grid; grid-template-columns: 1fr 1fr; }
+    @media(max-width:768px){ .calc-body { grid-template-columns: 1fr; } }
+
+    .calc-left { padding: 36px 40px; border-right: 1px solid var(--black-4); }
+    .calc-right { padding: 36px 40px; }
+    @media(max-width:768px){ .calc-left { border-right: none; border-bottom: 1px solid var(--black-4); } }
+
+    .calc-section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 24px;
+    }
+
+    .input-group { margin-bottom: 22px; }
+    .input-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--text-secondary); display: block; margin-bottom: 8px;
+    }
+    .input-row { display: flex; align-items: center; gap: 8px; }
+    .input-prefix { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+    .calc-input {
+      flex: 1; background: rgba(201,168,76,0.06); border: 1px solid var(--gold-border);
+      border-radius: 10px; padding: 12px 16px;
+      font-family: 'Urbanist', sans-serif; font-size: 16px; font-weight: 700;
+      color: var(--gold); outline: none; width: 100%; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .calc-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+    .calc-input.blue { background: rgba(81,172,188,0.06); border-color: var(--pacific-border); color: var(--pacific); }
+    .calc-input.blue:focus { border-color: var(--pacific); box-shadow: 0 0 0 3px rgba(81,172,188,0.12); }
+    .input-suffix { font-size: 12px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .input-hint { font-size: 11px; color: var(--text-muted); margin-top: 6px; padding-left: 2px; }
+
+    /* Tier selector inside calc */
+    .tier-select-wrap { margin-bottom: 28px; }
+    .tier-select-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; display: block; }
+    .tier-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media(max-width:500px){ .tier-options { grid-template-columns: repeat(2,1fr); } }
+    .tier-opt {
+      background: var(--black-3); border: 1px solid var(--black-4);
+      border-radius: 10px; padding: 10px 8px; text-align: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tier-opt:hover { border-color: var(--gold-border); }
+    .tier-opt.selected { background: var(--gold-dim); border-color: var(--gold-border); }
+    .tier-opt-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .tier-opt.selected .tier-opt-label { color: var(--gold); }
+    .tier-opt-price { font-size: 14px; font-weight: 800; color: var(--text-primary); }
+    .tier-opt.selected .tier-opt-price { color: var(--gold); }
+
+    /* Result rows */
+    .result-row {
+      background: var(--black-3); border: 1px solid var(--black-4);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 10px;
+    }
+    .result-row-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+    .result-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+    .result-sub { font-size: 11px; color: var(--text-muted); }
+    .result-amounts { text-align: right; }
+    .result-mxn { font-size: 18px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .result-usd { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+    .result-mxn.blue { color: var(--pacific); }
+    .result-mxn.green { color: var(--green); }
+    .result-mxn.red { color: var(--red); }
+
+    .result-total {
+      background: rgba(201,168,76,0.06); border: 1px solid var(--gold-border);
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 10px;
+    }
+
+    .result-neto {
+      background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(74,188,160,0.06) 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: 16px; padding: 24px 20px; margin-top: 16px;
+    }
+    .neto-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .neto-main { font-size: 44px; font-weight: 900; line-height: 1; letter-spacing: -0.02em; }
+    .neto-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .roi-bar-wrap { margin-top: 18px; }
+    .roi-bar-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .roi-bar-label { font-size: 11px; color: var(--text-muted); }
+    .roi-pct { font-size: 11px; font-weight: 700; color: var(--green); }
+    .roi-track { height: 7px; background: var(--black-4); border-radius: 999px; overflow: hidden; }
+    .roi-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold), var(--green)); transition: width 0.8s cubic-bezier(0.22,1,0.36,1); width: 0%; }
+
+    /* Breakdown table */
+    .breakdown-table {
+      background: var(--black-3); border: 1px solid var(--black-4);
+      border-radius: 14px; overflow: hidden; margin-top: 28px;
+    }
+    .bt-header {
+      display: grid; grid-template-columns: 1fr 120px 120px 100px;
+      gap: 8px; padding: 12px 20px;
+      background: rgba(201,168,76,0.04); border-bottom: 1px solid var(--black-4);
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+    }
+    @media(max-width:600px){ .bt-header { display: none; } }
+    .bt-row {
+      display: grid; grid-template-columns: 1fr 120px 120px 100px;
+      gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--black-4);
+      font-size: 13px; align-items: center;
+      transition: background 0.2s;
+    }
+    @media(max-width:600px){ .bt-row { grid-template-columns: 1fr 1fr; } }
+    .bt-row:last-child { border-bottom: none; }
+    .bt-row:hover { background: rgba(201,168,76,0.03); }
+    .bt-name { font-weight: 600; }
+    .bt-val { font-weight: 700; text-align: right; }
+    .bt-val.gold { color: var(--gold); }
+    .bt-val.blue { color: var(--pacific); }
+    .bt-val.muted { color: var(--text-muted); font-weight: 500; }
+    .bt-row.bt-total {
+      background: rgba(201,168,76,0.05); border-top: 1px solid var(--gold-border);
+      font-size: 14px;
+    }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--black-3); text-align: center; padding: 100px 24px; border-top: 1px solid var(--black-4); }
+    .cta-inner { max-width: 700px; margin: 0 auto; }
+    .cta-h { font-size: clamp(28px, 5vw, 52px); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .cta-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 40px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold); color: #0A0A0C;
+      font-size: 15px; font-weight: 800; letter-spacing: 0.04em;
+      padding: 16px 38px; border-radius: 999px; text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .cta-btn:hover { background: var(--gold-light); transform: scale(1.04); }
+    .cta-note { font-size: 12px; color: var(--text-muted); margin-top: 14px; }
+
+    footer {
+      text-align: center; padding: 30px;
+      border-top: 1px solid var(--black-4);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+
+
+    /* ── TOOLTIP ── */
+    .info-tooltip { position: relative; display: inline-flex; align-items: center; margin-left: 6px; vertical-align: middle; cursor: default; }
+    .info-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: var(--black-4); border: 1px solid var(--gold-border);
+      color: var(--gold); font-size: 9px; font-weight: 800; font-style: italic;
+      line-height: 1; cursor: help;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .info-tooltip:hover .info-icon { background: var(--gold-dim); border-color: var(--gold); }
+    .tooltip-text {
+      visibility: hidden; opacity: 0;
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--black-3); border: 1px solid var(--gold-border);
+      color: var(--text-secondary); font-size: 11px; font-weight: 500; font-style: normal;
+      line-height: 1.5; white-space: nowrap; padding: 8px 12px; border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: opacity 0.2s; pointer-events: none; z-index: 200;
+    }
+    .tooltip-text::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: var(--gold-border);
+    }
+    .info-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+
+    /* ── TOOLTIP ── */
+    .info-tooltip { position: relative; display: inline-flex; align-items: center; margin-left: 6px; vertical-align: middle; cursor: default; }
+    .info-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: var(--black-4); border: 1px solid var(--gold-border);
+      color: var(--gold); font-size: 9px; font-weight: 800; font-style: italic;
+      line-height: 1; cursor: help; transition: background 0.2s, border-color 0.2s;
+    }
+    .info-tooltip:hover .info-icon { background: var(--gold-dim); border-color: var(--gold); }
+    .tooltip-text {
+      visibility: hidden; opacity: 0;
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--black-3); border: 1px solid var(--gold-border);
+      color: var(--text-secondary); font-size: 11px; font-weight: 500; font-style: normal;
+      line-height: 1.5; white-space: nowrap; padding: 8px 12px; border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: opacity 0.2s; pointer-events: none; z-index: 200;
+    }
+    .tooltip-text::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: var(--gold-border);
+    }
+    .info-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+    /* inputs no spinner */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* slider */
+    .user-slider {
+      width: 100%; -webkit-appearance: none; appearance: none;
+      height: 6px; border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold) var(--pct,0%), var(--black-4) var(--pct,0%));
+      outline: none; cursor: pointer; margin-top: 12px;
+    }
+    .user-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--gold); border: 3px solid var(--black-2);
+      box-shadow: 0 2px 8px rgba(201,168,76,0.4);
+      cursor: grab; transition: transform 0.15s;
+    }
+    .user-slider::-webkit-slider-thumb:active { transform: scale(1.2); cursor: grabbing; }
+    .user-slider::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--gold); border: 3px solid var(--black-2); cursor: grab;
+    }
+
+    .lp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; display: inline-block; }
+
+    /* Toggle switch */
+    .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background: var(--black-4); border-radius: 999px;
+      transition: background 0.25s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--text-muted);
+      left: 3px; top: 3px;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: rgba(81,172,188,0.25); border: 1px solid var(--pacific-border); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--pacific); }
+
+    /* divider between sections */
+    .divider-line { border: none; border-top: 1px solid var(--black-4); }
+
+
+    @media(max-width:640px){
+      /* Larger tap targets */
+      .cta-btn { padding: 14px 28px; font-size: 14px; }
+      .ff-card, .tier-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+      /* Calculator inputs bigger on mobile */
+      .calc-input { font-size: 18px; padding: 14px 16px; }
+      /* Section headers */
+      .section-h { font-size: clamp(26px, 7vw, 40px); }
+      /* Hero h1 */
+      .hero h1 { font-size: clamp(38px, 10vw, 70px); }
+      /* Neto main number */
+      .neto-main { font-size: clamp(28px, 8vw, 44px); }
+    }
+    /* ══════════════════════════════════
+       RESPONSIVE MOBILE — added
+    ══════════════════════════════════ */
+
+    /* NAV mobile */
+    @media(max-width:768px){
+      nav {
+        padding: 12px 18px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .nav-logo { gap: 8px; }
+      /* Hide nav links on mobile, keep logos + pill */
+      .nav-links { display: none !important; }
+      nav > div:nth-child(2) { gap: 10px; }
+      .nav-pill { font-size: 9px; padding: 3px 9px; }
+    }
+
+    /* Hero card fixed width → fluid */
+    @media(max-width:480px){
+      .hero-card-wrap { width: 100%; padding: 0 8px; }
+      .hero-card { width: 100% !important; height: auto !important; padding: 22px 20px; }
+      .hero { padding: 100px 16px 60px; }
+      .hero-stats { gap: 10px; }
+      .hstat { padding: 14px 16px; }
+    }
+
+    /* All inline 2-col grids → 1 col on mobile */
+    @media(max-width:640px){
+      div[style*="grid-template-columns:1fr 1fr"],
+      div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+      }
+      /* Section padding */
+      .section { padding: 60px 16px; }
+      .section-inner { padding: 0; }
+      .calc-left, .calc-right { padding: 24px 20px; }
+      .calc-header { padding: 20px 20px; }
+      /* Breakdown table */
+      .bt-header { display: none; }
+      .bt-row { grid-template-columns: 1fr 1fr !important; gap: 4px; font-size:12px; padding: 10px 14px; }
+    }
+
+    /* Exec card */
+    @media(max-width:480px){
+      #exec-grid { flex-direction: column; align-items: center; }
+      .exec-card { max-width: 100% !important; width: 100% !important; }
+      .cta-section { padding: 60px 16px; }
+    }
+
+    /* FF grid */
+    @media(max-width:480px){
+      .ff-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Tier grid already has media queries but reinforce */
+    @media(max-width:400px){
+      .tier-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Hero wordmark separator on mobile */
+    @media(max-width:480px){
+      .nav-wordmark { font-size: 16px; }
+    }
+
+    /* Tooltip — show below on mobile */
+    @media(max-width:600px){
+      .tooltip-text { left: auto; right: 0; transform: none; }
+      .tooltip-text::after { left: auto; right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-logo">
+    <!-- Jeeves logo → tryjeeves.com -->
+    <a href="https://www.tryjeeves.com" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--gold);">
+      <svg width="32" height="32" viewBox="0 0 1590.21 1517.93" xmlns="http://www.w3.org/2000/svg">
+        <circle fill="#020202" cx="798.37" cy="759.62" r="659.19"/>
+        <path fill="#c1a464" d="M703.2,775.19h190.35l-27.93-210.47c68.69-6.56,137.38-13.12,206.08-19.68-46.52-49.28-93.05-98.56-139.57-147.85l-133.75,112.72-133.75-112.72c-46.52,49.28-93.05,98.56-139.57,147.85,68.69,6.56,137.38,13.12,206.08,19.68l-27.93,210.47Z"/>
+        <polygon fill="#c1a464" points="654.57 640.37 504.17 567.02 442.73 632.24 653.08 806.35 654.57 640.37"/>
+        <path fill="#c1a464" d="M775.18,907.85l-113.17-94.12-74.68,75.47c19.33,35.07,45.63,82.62,64.95,117.69,43.29-17.48,79.61-47.42,122.9-64.9v-34.14Z"/>
+        <path fill="#c1a464" d="M673.8,1045.36c5.31,19.79,10.63,39.59,15.94,59.38l26.95,17.3h163.36l26.95-17.3c5.31-19.79,10.63-39.59,15.94-59.38-41.52-9.7-83.05-19.4-124.57-29.09-41.52,9.7-83.05,19.4-124.57,29.09Z"/>
+        <polygon fill="#c1a464" points="943.66 806.35 1154.01 632.24 1092.57 567.02 942.17 640.37 943.66 806.35"/>
+        <path fill="#c1a464" d="M821.56,907.85v34.14c43.29,17.48,78.11,47.42,121.41,64.9,19.33-35.07,47.12-82.62,66.45-117.69l-74.68-75.47-113.17,94.12Z"/>
+      </svg>
+      <span class="nav-wordmark">Jeeves</span>
+    </a>
+    
+
+    <!-- Comfandi client logo -->
+    <span style="width:1px;height:24px;background:var(--black-4);display:inline-block;margin:0 16px;"></span>
+    <a href="https://www.homecenter.com.co/homecenter-co/" target="_blank" rel="noopener" style="display:flex;align-items:center;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgOTAiIHdpZHRoPSIyMjAiIGhlaWdodD0iOTAiPgogIDwhLS0gSG91c2UgaWNvbiBncm91cCAtLT4KICA8IS0tIE91dGVyIGhvdXNlIG91dGxpbmUgKGJsYWNrIGZpbGwsIGNsaXAgcGF0aCBjcmVhdGVzIHNoYXBlKSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIj4KICAgIDwhLS0gSG91c2UgYm9keSBiYWNrZ3JvdW5kIGJsYWNrIC0tPgogICAgPHJlY3QgeD0iOCIgeT0iNDAiIHdpZHRoPSI2MiIgaGVpZ2h0PSI0MiIgcng9IjIiIGZpbGw9IiMxMTEiLz4KICAgIDwhLS0gSG91c2Ugcm9vZiBwb2x5Z29uIGJsYWNrIC0tPgogICAgPHBvbHlnb24gcG9pbnRzPSIzOSw1IDMsNDIgNzUsNDIiIGZpbGw9IiMxMTEiLz4KICAgIDwhLS0gSW5uZXIgaG91c2Ugc3BsaXQgaW50byA0IHF1YWRyYW50cyAtLT4KICAgIDwhLS0gVG9wLWxlZnQgeWVsbG93IChjaGltbmV5IGFyZWEgcmVwcmVzZW50ZWQgYXMgdG9wLWxlZnQgYm9keSkgLS0+CiAgICA8cmVjdCB4PSIxMSIgeT0iNDIiIHdpZHRoPSIyOCIgaGVpZ2h0PSIxOSIgZmlsbD0iI0Y1QzUxOCIvPgogICAgPCEtLSBUb3AtcmlnaHQgYmx1ZSAtLT4KICAgIDxyZWN0IHg9IjQxIiB5PSI0MiIgd2lkdGg9IjI3IiBoZWlnaHQ9IjE5IiBmaWxsPSIjMUU2QkI1Ii8+CiAgICA8IS0tIEJvdHRvbS1sZWZ0IHJlZCAtLT4KICAgIDxyZWN0IHg9IjExIiB5PSI2MyIgd2lkdGg9IjI4IiBoZWlnaHQ9IjE3IiBmaWxsPSIjRTAyMDIwIi8+CiAgICA8IS0tIEJvdHRvbS1yaWdodCBibGFjayAoZG9vcikgLS0+CiAgICA8cmVjdCB4PSI0MSIgeT0iNjMiIHdpZHRoPSIyNyIgaGVpZ2h0PSIxNyIgZmlsbD0iIzFhMWExYSIvPgogICAgPCEtLSBSb29mIGlubmVyIHJlZCB0cmlhbmdsZSAtLT4KICAgIDxwb2x5Z29uIHBvaW50cz0iMzksMTAgOCw0MiA3MCw0MiIgZmlsbD0iI0UwMjAyMCIvPgogICAgPCEtLSBEaXZpZGVyIGxpbmVzIGZvciByZWFsaXNtIC0tPgogICAgPGxpbmUgeDE9IjM5IiB5MT0iNDIiIHgyPSIzOSIgeTI9IjgwIiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPGxpbmUgeDE9IjExIiB5MT0iNjEiIHgyPSI2OCIgeTI9IjYxIiBzdHJva2U9IiMxMTEiIHN0cm9rZS13aWR0aD0iMiIvPgogIDwvZz4KICA8IS0tIFNPRElNQUMuIHRleHQgaW4gcmVkIC0tPgogIDx0ZXh0IHg9Ijg1IiB5PSI1OCIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSIyNiIgZmlsbD0iI0UwMjAyMCIgbGV0dGVyLXNwYWNpbmc9IjEiPlNPRElNQUM8L3RleHQ+CiAgPHRleHQgeD0iMjEyIiB5PSI1OCIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSIyNiIgZmlsbD0iI0UwMjAyMCI+LjwvdGV4dD4KPC9zdmc+" alt="Sodimac" style="height:38px;width:auto;display:block;">
+    </a>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="nav-links" style="display:flex;gap:20px;">
+      <a href="#sec-hero" style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Tarjetas</a>
+      <a href="#sec-control" style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-muted)'">Control</a>
+      <a href="#sec-contabilidad" style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Contable</a>
+      <a href="#sec-calc" style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Calculadora</a>
+    </div>
+    <a href="#sec-cta" style="text-decoration:none;"><span class="nav-pill">Propuesta Sodimac</span></a>
+
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="sec-hero">
+  <div class="eyebrow reveal">Control total del gasto empresarial</div>
+  <h1 class="reveal">Tarjetas que<br><em>obedecen tus reglas.</em></h1>
+  <p class="hero-sub reveal">Crea, controla y monitorea cada tarjeta de tu empresa — por usuario, área o evento — con límites en tiempo real, visibilidad total y sin fricción.</p>
+
+  <div class="hero-card-wrap reveal">
+    <div class="hero-card">
+      <div class="hc-top">
+        <div class="hc-logo">
+          <svg width="20" height="20" viewBox="0 0 1590.21 1517.93" xmlns="http://www.w3.org/2000/svg">
+            <circle fill="#020202" cx="798.37" cy="759.62" r="659.19"/>
+            <path fill="#c1a464" d="M703.2,775.19h190.35l-27.93-210.47c68.69-6.56,137.38-13.12,206.08-19.68-46.52-49.28-93.05-98.56-139.57-147.85l-133.75,112.72-133.75-112.72c-46.52,49.28-93.05,98.56-139.57,147.85,68.69,6.56,137.38,13.12,206.08,19.68l-27.93,210.47Z"/>
+            <polygon fill="#c1a464" points="654.57 640.37 504.17 567.02 442.73 632.24 653.08 806.35 654.57 640.37"/>
+            <path fill="#c1a464" d="M775.18,907.85l-113.17-94.12-74.68,75.47c19.33,35.07,45.63,82.62,64.95,117.69,43.29-17.48,79.61-47.42,122.9-64.9v-34.14Z"/>
+            <path fill="#c1a464" d="M673.8,1045.36c5.31,19.79,10.63,39.59,15.94,59.38l26.95,17.3h163.36l26.95-17.3c5.31-19.79,10.63-39.59,15.94-59.38-41.52-9.7-83.05-19.4-124.57-29.09-41.52,9.7-83.05,19.4-124.57,29.09Z"/>
+            <polygon fill="#c1a464" points="943.66 806.35 1154.01 632.24 1092.57 567.02 942.17 640.37 943.66 806.35"/>
+            <path fill="#c1a464" d="M821.56,907.85v34.14c43.29,17.48,78.11,47.42,121.41,64.9,19.33-35.07,47.12-82.62,66.45-117.69l-74.68-75.47-113.17,94.12Z"/>
+          </svg>
+          <span class="hc-logo-text">JEEVES</span>
+        </div>
+        <div class="hc-tag">Activa ✦</div>
+      </div>
+      <div class="hc-chip"></div>
+      <div class="hc-num">•••• •••• •••• 4821</div>
+      <div class="hc-bottom">
+        <div>
+          <div class="hc-label-small">Titular</div>
+          <div class="hc-name" style="font-size:11px;letter-spacing:0.03em;">Adriana Pinzon</div>
+        </div>
+        <div style="text-align:right">
+          <div class="hc-label-small">Límite mensual</div>
+          <div style="font-size:16px;font-weight:800;color:var(--gold);">USD 15,000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+
+  <div class="hero-stats reveal">
+    <div class="hstat"><div class="hstat-num">∞</div><div class="hstat-label">Tarjetas virtuales ilimitadas</div></div>
+    <div class="hstat"><div class="hstat-num">⚡</div><div class="hstat-label">Emisión instantánea</div></div>
+    <div class="hstat"><div class="hstat-num">150+</div><div class="hstat-label">Países aceptados</div></div>
+    <div class="hstat"><div class="hstat-num">0</div><div class="hstat-label">Sorpresas al mes</div></div>
+    <div class="hstat"><div class="hstat-num">50</div><div class="hstat-label">Cards incluidas</div><div style="font-size:9px;color:var(--text-muted);margin-top:4px;">+ USD 5 / card adicional</div></div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Ver propuesta</span>
+    <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M8 3v10M3 8l5 5 5-5" stroke="#5A5755" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     SECCIÓN — PRECIOS POR TIER (MXN)
+══════════════════════════════════════ -->
+<!-- ══════════════════════════════════
+     SECCIÓN — PLATAFORMA DE CONTROL
+══════════════════════════════════════ -->
+<section id="sec-control" class="section" style="background:var(--black);">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <div class="section-tag">⑤ Plataforma de Control</div>
+      <h2 class="section-h">Visibilidad total<br><em style="font-style:normal;background:linear-gradient(135deg,var(--green),#7edad0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">del gasto corporativo.</em></h2>
+      <p class="section-sub">Manejo de equipos, límites de gasto y captura de recibos — todo en un solo panel. Tú decides quién gasta cuánto y cuándo.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;" class="reveal">
+
+      <!-- Visibilidad -->
+      <div style="background:var(--black-2);border:1px solid var(--pacific-border);border-radius:18px;padding:26px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(81,172,188,0.08) 0%,transparent 70%);"></div>
+        <div style="font-size:24px;margin-bottom:12px;">👁️</div>
+        <div style="font-size:14px;font-weight:800;color:var(--pacific);margin-bottom:12px;">Visibilidad Total</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Límites por tarjeta y usuario</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Transacciones en tiempo real</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Tarjetas activas y su estado</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Solicitudes pendientes</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Bloqueos y restricciones vigentes</li>
+        </ul>
+      </div>
+
+      <!-- Acciones admin -->
+      <div style="background:var(--black-2);border:1px solid var(--pacific-border);border-radius:18px;padding:26px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(81,172,188,0.08) 0%,transparent 70%);"></div>
+        <div style="font-size:24px;margin-bottom:12px;">🎛️</div>
+        <div style="font-size:14px;font-weight:800;color:var(--pacific);margin-bottom:12px;">Acciones del Admin</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Aprobar / rechazar solicitudes</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Modificar límites en tiempo real</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Congelar o cancelar tarjetas</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Restringir MCC o comercios</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--pacific);flex-shrink:0;"></span>Aprobar excepciones</li>
+        </ul>
+      </div>
+
+      <!-- Equipo financiero -->
+      <div style="background:var(--black-2);border:1px solid rgba(74,188,160,0.25);border-radius:18px;padding:26px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(74,188,160,0.08) 0%,transparent 70%);"></div>
+        <div style="font-size:24px;margin-bottom:12px;">📂</div>
+        <div style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:12px;">Equipo Financiero</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Validar comprobaciones</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Conciliar movimientos</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Monitorear cumplimiento de política</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Descargar documentación fiscal</li>
+          <li style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Gestionar reembolsos</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Live dashboard strip -->
+    <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:18px;padding:28px 32px;" class="reveal">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(74,188,160,0.1);border:1px solid rgba(74,188,160,0.25);color:var(--green);padding:5px 12px;border-radius:999px;">
+          <span class="lp-dot"></span> En vivo · Tiempo real
+        </span>
+        <span style="font-size:13px;font-weight:700;">Límites de gasto — Mayo 2025</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Ana Robles · RRHH</span><span style="font-size:12px;font-weight:700;"><span style="color:var(--gold);">$8,400</span><span style="color:var(--text-muted);"> / $15,000</span></span></div>
+          <div style="height:7px;background:var(--black-4);border-radius:999px;overflow:hidden;"><div style="height:100%;width:56%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 1.5s cubic-bezier(0.22,1,0.36,1);"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Equipo Marketing</span><span style="font-size:12px;font-weight:700;"><span style="color:var(--pacific);">$31,200</span><span style="color:var(--text-muted);"> / $60,000</span></span></div>
+          <div style="height:7px;background:var(--black-4);border-radius:999px;overflow:hidden;"><div style="height:100%;width:52%;border-radius:999px;background:linear-gradient(90deg,var(--pacific),#7ecfde);"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Summit CDMX 2025</span><span style="font-size:12px;font-weight:700;"><span style="color:var(--amber);">$17,600</span><span style="color:var(--text-muted);"> / $20,000</span></span></div>
+          <div style="height:7px;background:var(--black-4);border-radius:999px;overflow:hidden;"><div style="height:100%;width:88%;border-radius:999px;background:linear-gradient(90deg,var(--amber),#e0b060);"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Carlos Vega · Ventas</span><span style="font-size:12px;font-weight:700;"><span style="color:var(--green);">$2,100</span><span style="color:var(--text-muted);"> / $10,000</span></span></div>
+          <div style="height:7px;background:var(--black-4);border-radius:999px;overflow:hidden;"><div style="height:100%;width:21%;border-radius:999px;background:linear-gradient(90deg,var(--green),#7edad0);"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     SECCIÓN — AUTOMATIZACIÓN CONTABLE
+══════════════════════════════════════ -->
+<section id="sec-contabilidad" class="section" style="background:var(--black-3);">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <div class="section-tag">⑥ Automatización Contable</div>
+      <h2 class="section-h">Del gasto al cierre contable<br><em style="font-style:normal;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">en minutos.</em></h2>
+      <p class="section-sub">Reglas contables que se aplican solas. Mapeo GL, categorías e integraciones con tu ERP favorito — sin intervención manual.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;align-items:start;" class="reveal">
+
+      <!-- Left: Flujo visual -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+
+
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:22px;flex-shrink:0;margin-top:2px;">🗺️</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Mapeo de código GL</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Asignación automática de códigos contables por tipo de transacción, departamento o proveedor.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:22px;flex-shrink:0;margin-top:2px;">🏷️</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Categorización automática</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Clasificación por tipo de gasto y centro de costo — sin etiquetado manual por el equipo.</div>
+          </div>
+        </div>
+
+        <!-- ERP integrations -->
+        <div style="background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:16px;padding:20px 22px;">
+          <div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:14px;">🔗 Integraciones ERP</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:8px;padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-secondary);">⚡ NetSuite</div>
+            <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:8px;padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-secondary);">🔵 QuickBooks</div>
+            <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:8px;padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-secondary);">🔗 Jeeves API</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Métodos + beneficios -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:22px 24px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">📋 Métodos de comprobación</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></span><span style="font-size:13px;"><strong style="color:var(--text-primary);">Comprobantes digitales</strong><span style="color:var(--text-muted);"> — captura y clasifica gastos en segundos</span></span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></span><span style="font-size:13px;"><strong style="color:var(--text-primary);">Carga manual</strong><span style="color:var(--text-muted);"> — facturas PDF y XML directas</span></span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></span><span style="font-size:13px;"><strong style="color:var(--text-primary);">Tickets digitales</strong></span></div>
+            <div style="display:flex;align-items:center;gap:10px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></span><span style="font-size:13px;"><strong style="color:var(--text-primary);">Notas y comprobantes</strong><span style="color:var(--text-muted);"> — escritos por el usuario</span></span></div>
+          </div>
+        </div>
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:22px 24px;">
+          <div style="font-size:22px;margin-bottom:10px;">📊</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px;">Reportes a tu medida</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Exporta y filtra según tu modelo contable — sin trabajo manual, compatible con auditoría.</div>
+        </div>
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:22px 24px;">
+          <div style="font-size:22px;margin-bottom:10px;">🔄</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px;">Sincronización automática</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Tus transacciones se reflejan en tu ERP sin intervención manual. Cierre contable fluido.</div>
+        </div>
+
+        <div style="background:var(--black-2);border:1px solid var(--black-4);border-radius:16px;padding:22px 24px;">
+          <div style="font-size:22px;margin-bottom:10px;">🧾</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px;">Comprobación de gastos</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Adjunta comprobantes y cierra el ciclo contable desde la plataforma — sin correos ni papeles.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     SECCIÓN — CALCULADORA DINÁMICA
+══════════════════════════════════════ -->
+<section id="sec-calc" class="section" style="background:var(--black-3);">
+  <div class="section-inner">
+
+    <div class="reveal">
+      <div class="section-tag">② Calculadora de Inversión</div>
+      <h2 class="section-h">Calcula tu costo<br><em style="font-style:normal;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">exacto anual.</em></h2>
+      <p class="section-sub">Ajusta los parámetros y visualiza en tiempo real cuánto invierte tu empresa en la plataforma Jeeves — en USD y COP.</p>
+    </div>
+
+    <div class="calc-wrapper reveal">
+
+      <!-- Header with TDC -->
+      <div class="calc-header">
+        <div>
+          <div class="calc-title">💰 Calculadora de Inversión · Colombia</div>
+          <div class="calc-subtitle">Celdas en <span>dorado</span> = valores editables · Todo se recalcula al instante</div>
+        </div>
+        <div class="tdc-wrap">
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <div class="tdc-label">Tipo de cambio <span id="tdc-live-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--text-muted);margin-left:4px;vertical-align:middle;" title="Actualizando COP/USD..."></span></div>
+            <a href="https://www.xe.com/es/currencyconverter/convert/?Amount=1&From=USD&To=COP" target="_blank" rel="noopener" style="font-size:9px;font-weight:700;letter-spacing:0.08em;color:var(--text-muted);text-decoration:none;opacity:0.7;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Fuente: xe.com ↗</a>
+          </div>
+          <input id="tdc" class="tdc-input" type="number" value="3500" step="10" oninput="recalc()">
+          <div class="tdc-suffix">COP / USD</div>
+        </div>
+      </div>
+
+      <div class="calc-body">
+
+        <!-- LEFT: Inputs -->
+        <div class="calc-left">
+          <div class="calc-section-label">📋 Configura tu empresa · Precios en USD</div>
+
+          <!-- Costo plataforma mensual -->
+          <div class="input-group">
+            <label class="input-label">Plan de la plataforma</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+              <div id="plan_1000" onclick="selectPlan(1000)"
+                style="background:rgba(201,168,76,0.10);border:1.5px solid var(--gold);border-radius:10px;
+                       padding:12px 14px;cursor:pointer;transition:all 0.2s;">
+                <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;">Cliente Platinum</div>
+                <div style="font-size:20px;font-weight:900;color:var(--text-primary);line-height:1.2;margin-top:4px;">USD 1,000<span style="font-size:11px;font-weight:500;color:var(--text-muted)">/mes</span></div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:3px;">USD 12,000 / año · Incluye cashback</div>
+              </div>
+              <div id="plan_500" onclick="selectPlan(500)"
+                style="background:var(--black-3);border:1.5px solid var(--black-4);border-radius:10px;
+                       padding:12px 14px;cursor:pointer;transition:all 0.2s;">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;">Cliente Gold</div>
+                <div style="font-size:20px;font-weight:900;color:var(--text-primary);line-height:1.2;margin-top:4px;">USD 500<span style="font-size:11px;font-weight:500;color:var(--text-muted)">/mes</span></div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:3px;">USD 6,000 / año · Sin cashback</div>
+              </div>
+            </div>
+            <input type="hidden" id="costo_plataforma" value="1000">
+            <div class="input-hint" style="margin-top:8px;">Equivale a <span id="hint_plat_ano">USD 12,000</span> / año</div>
+          </div>
+
+          <!-- Descuento -->
+          <div class="input-group" id="descuento-group" style="display:none;">
+            <label class="input-label">Descuento negociado (%)</label>
+            <div class="input-row">
+              <input id="descuento" class="calc-input" type="number" value="0" min="0" max="50" step="1" oninput="recalc()">
+              <span class="input-suffix">%</span>
+            </div>
+            <div class="input-hint">Descuento aplicado sobre precio de tier</div>
+          </div>
+
+          <!-- FotoFacturas toggle -->
+          <!-- Gasto tarjetas — Cashback (1) -->
+          <div style="border-top:1px solid var(--black-4);padding-top:22px;margin-top:4px;">
+            <div class="calc-section-label">💳 Gasto Corporativo Mensual · COP (Cashback)</div>
+
+            <div class="input-group">
+              <label class="input-label">Gasto mensual en tarjetas (COP)</label>
+              <div class="input-row">
+                <span class="input-prefix">$</span>
+                <input id="gasto_tarjetas" class="calc-input" type="number" value="1500000000" step="5000000" oninput="recalc()">
+                <span class="input-suffix">COP/mes</span>
+              </div>
+              <div class="input-hint" id="hint_gasto_anual" style="color:var(--text-muted);">Semestral: —</div>
+            </div>
+          </div>
+
+
+          <!-- Impuesto por transacciones en tarjeta (2.5) -->
+          <div style="border-top:1px solid var(--black-4);padding-top:22px;margin-top:4px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="impuesto_check" onchange="toggleImpuesto()" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="calc-section-label" style="margin-bottom:0;">💸 Gravamen 4×1000 — Impuesto por Transacciones</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:16px;">Gravamen 4×1000: por cada $1,000 COP en transacciones se cobran $4 COP (= 0.4%). Se calcula automáticamente sobre el gasto mensual en tarjetas.</div>
+
+            <div id="impuesto-fields">
+              <div class="input-group">
+                <label class="input-label">Costo mensual Gravamen 4×1000 ($4 por cada $1,000 COP)</label>
+                <div class="input-row">
+                  <span class="input-prefix">$</span>
+                  <input id="impuesto_valor" class="calc-input" type="text" readonly
+                    style="background:rgba(201,168,76,0.03);border-color:rgba(201,168,76,0.15);color:var(--text-secondary);cursor:default;"
+                    value="0">
+                  <span class="input-suffix">COP/mes</span>
+                </div>
+                <div class="input-hint" style="color:var(--gold);">Automático: Gasto mensual ÷ 1,000 × $4 · no editable</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cajero automático (3) -->
+          <div style="border-top:1px solid var(--black-4);padding-top:22px;margin-top:4px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cajero_check" onchange="toggleCajero()">
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="calc-section-label" style="margin-bottom:0;">🏧 Retiros en Cajero Automático</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:16px;">Activa si el cliente usa cajeros — calcula el ahorro por comisiones eliminadas</div>
+
+            <div id="cajero-fields" style="display:none;">
+              <div class="input-group">
+                <label class="input-label">Gasto mensual en retiros cajero (COP)</label>
+                <div class="input-row">
+                  <span class="input-prefix">$</span>
+                  <input id="gasto_cajeros" class="calc-input blue" type="number" value="200000000" step="5000000" oninput="recalc()">
+                  <span class="input-suffix">COP/mes</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Descuento de comisión por retiro en cajero (%)
+              <span class="info-tooltip">
+                <span class="info-icon">i</span>
+                <span class="tooltip-text">Comisión normal Jeeves 3% adicional a lo que cobran los cajeros.</span>
+              </span></label>
+                <div class="input-row">
+                  <input id="comision_caj" class="calc-input blue" type="number" value="0" step="0.1" min="0" max="10" oninput="recalc()">
+                  <span class="input-suffix">%</span>
+                </div>
+                <div class="input-hint">Jeeves elimina esta comisión → ahorro directo anual en USD</div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="calc-right">
+          <div class="calc-section-label">✅ Resumen de Inversión Anual</div>
+
+          <!-- Platform cost -->
+          <div class="result-row">
+            <div class="result-row-top">
+              <div>
+                <div class="result-name">Plataforma Jeeves</div>
+              </div>
+              <div class="result-amounts">
+                <div class="result-mxn" id="res_plat_usd" style="font-size:17px;">USD 0 / año</div>
+                <div class="result-usd" id="res_plat_cop">≈ COP 0 / año</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total investmnet -->
+          <div class="result-total">
+            <div class="result-row-top">
+              <div style="font-size:13px;font-weight:700;">💳 Total Inversión Plataforma</div>
+              <div class="result-amounts">
+                <div class="result-mxn" id="res_total_usd" style="font-size:22px;">USD 0 / año</div>
+                <div class="result-usd" id="res_total_cop">≈ COP 0 / año</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Savings separator -->
+          <div style="border-top:1px solid var(--black-4);margin:20px 0;"></div>
+          <div class="calc-section-label">🎁 Beneficios & Ahorros Estimados</div>
+
+          <!-- Cashback -->
+          <div class="result-row" id="res_cb_row">
+            <div class="result-row-top">
+              <div>
+                <div class="result-name">Cashback 1% · 6 meses</div>
+                <div class="result-sub">Sobre gasto en tarjetas corporativas</div>
+              </div>
+              <div class="result-amounts">
+                <div class="result-mxn green" id="res_cb_usd">USD 0</div>
+                <div class="result-usd" id="res_cb_cop">≈ COP 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Impuesto savings row -->
+          <div class="result-row" id="res_imp_row" style="display:none;">
+            <div class="result-row-top">
+              <div>
+                <div class="result-name">Ahorro Gravamen 4×1000</div>
+                <div class="result-sub">$4 por cada $1,000 COP en transacciones · ahorro anual</div>
+              </div>
+              <div class="result-amounts">
+                <div class="result-mxn green" id="res_imp_usd">USD 0</div>
+                <div class="result-usd" id="res_imp_cop">≈ COP 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cajero savings — oculto si comisión = 0 -->
+          <div class="result-row" id="res_caj_row" style="display:none;">
+            <div class="result-row-top">
+              <div>
+                <div class="result-name" id="res_caj_label">Ahorro comisiones cajero</div>
+                <div class="result-sub">Comisión eliminada × gasto anual en USD</div>
+              </div>
+              <div class="result-amounts">
+                <div class="result-mxn green" id="res_caj_usd">USD 0</div>
+                <div class="result-usd" id="res_caj_cop">≈ COP 0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NETO -->
+          <div class="result-neto">
+            <div class="neto-label">🏆 Inversión Neta Anual (Costo − Ahorros)</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <div class="neto-main" id="res_neto_usd2" style="color:var(--gold);">USD 0</div>
+                <div class="neto-sub">/ año · incluye plataforma − ahorros</div>
+              </div>
+              <div style="text-align:right;">
+                <div id="res_neto_cop" style="font-size:18px;font-weight:700;color:var(--text-secondary);"></div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">COP equivalente</div>
+              </div>
+            </div>
+            <div class="roi-bar-wrap">
+              <div class="roi-bar-top">
+                <span class="roi-bar-label">Retorno sobre inversión</span>
+                <span class="roi-pct" id="res_roi">—</span>
+              </div>
+              <div class="roi-track"><div class="roi-fill" id="roi_fill"></div></div>
+            </div>
+          </div>
+
+
+          <div style="margin-top:12px;font-size:10px;color:var(--text-muted);line-height:1.6;">
+            * Tipo de cambio COP/USD configurable. El cashback aplica 6 meses del año.
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--gold);font-weight:600;letter-spacing:0.04em;">💡 Precio más IVA · Tipo de cambio COP/USD de referencia</div>
+        </div>
+      </div>
+
+
+    </div><!-- /calc-wrapper -->
+
+  </div>
+</section>
+
+
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" id="sec-cta">
+  <div class="cta-inner">
+    <div class="eyebrow reveal">¿Listo para dar el siguiente paso?</div>
+    <h2 class="cta-h reveal">Contáctame.</h2>
+    <p class="cta-sub reveal">Estoy aquí para resolver todas tus dudas y continuar el proceso.</p>
+
+    <!-- Ejecutivo cards -->
+    <div id="exec-grid" class="reveal" style="display:flex;justify-content:center;gap:12px;margin-bottom:32px;text-align:left;">
+
+      <div class="exec-card selected" onclick="selectExec('Carlos Gomez','carlos.gomez@tryjeeves.com')" style="max-width:320px;width:100%;">
+        <div class="exec-avatar">CG</div>
+        <div class="exec-info">
+          <div class="exec-name">Carlos Gomez</div>
+          <div class="exec-role">Account Executive · Jeeves Colombia</div>
+        </div>
+        <div class="exec-check" style="background:var(--green);border-color:var(--green);color:#0A0A0C;box-shadow:0 0 8px rgba(74,188,160,0.4);">✓</div>
+      </div>
+
+    </div>
+
+    <!-- CTA Button -->
+    <button id="exec-btn" class="cta-btn reveal" onclick="openMail()" style="border:none;cursor:pointer;opacity:1;background:var(--gold);">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12v9H2z" stroke="#0A0A0C" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 4l6 5 6-5" stroke="#0A0A0C" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Contactar a Carlos
+    </button>
+    <p class="cta-note reveal" id="exec-note">Se abrirá tu cliente de correo con un mensaje listo para Carlos Gomez · carlos.gomez@tryjeeves.com</p>
+  </div>
+</section>
+
+<style>
+  .exec-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--black-2); border: 1px solid var(--black-4);
+    border-radius: 14px; padding: 14px 16px;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .exec-card:hover { border-color: var(--gold-border); transform: translateY(-2px); }
+  .exec-card.selected { border-color: var(--gold-border); background: var(--gold-dim); }
+  .exec-avatar {
+    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #0A0A0C; letter-spacing: 0.04em;
+  }
+  .exec-info { flex: 1; }
+  .exec-name { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .exec-role { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .exec-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--black-4); background: var(--black-3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: transparent;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .exec-card.selected .exec-check {
+    background: var(--green); border-color: var(--green);
+    color: #0A0A0C; box-shadow: 0 0 8px rgba(74,188,160,0.4);
+  }
+  #exec-btn:not([disabled]) { cursor: pointer; opacity: 1; }
+  #exec-btn:not([disabled]):hover { background: var(--gold-light) !important; transform: scale(1.04); }
+</style>
+
+<script>
+  var selectedExecName  = 'Carlos Gomez';
+  var selectedExecEmail = 'carlos.gomez@tryjeeves.com';
+
+  function selectExec(name, email) {
+    selectedExecName  = name;
+    selectedExecEmail = email;
+    document.querySelectorAll('.exec-card').forEach(function(c) { c.classList.remove('selected'); });
+    event.currentTarget.classList.add('selected');
+    var btn = document.getElementById('exec-btn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12v9H2z" stroke="#0A0A0C" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 4l6 5 6-5" stroke="#0A0A0C" stroke-width="1.5" stroke-linecap="round"/></svg> Contactar a ' + name.split(' ')[0];
+    document.getElementById('exec-note').textContent = 'Se abrirá tu cliente de correo con un mensaje listo para ' + name + ' · ' + email;
+  }
+
+  function openMail() {
+    var subject = encodeURIComponent('Propuesta Jeeves — Sodimac · Solicitud de información');
+    var body = encodeURIComponent(
+      'Hola,\n\n' +
+      'Revisé la propuesta comercial de Jeeves y me gustaría agendar una llamada para conocer más detalles sobre la propuesta que me enviaste.\n\n' +
+      'Quedo en espera de tu respuesta.\n\n' +
+      'Saludos,'
+    );
+    window.location.href = 'mailto:' + selectedExecEmail + '?subject=' + subject + '&body=' + body;
+  }
+</script>
+
+<footer>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <svg width="22" height="22" viewBox="0 0 1590.21 1517.93" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;opacity:0.4">
+        <circle fill="#5A5755" cx="798.37" cy="759.62" r="659.19"/>
+        <path fill="#9A9690" d="M703.2,775.19h190.35l-27.93-210.47c68.69-6.56,137.38-13.12,206.08-19.68-46.52-49.28-93.05-98.56-139.57-147.85l-133.75,112.72-133.75-112.72c-46.52,49.28-93.05,98.56-139.57,147.85,68.69,6.56,137.38,13.12,206.08,19.68l-27.93,210.47Z"/>
+        <polygon fill="#9A9690" points="654.57 640.37 504.17 567.02 442.73 632.24 653.08 806.35 654.57 640.37"/>
+        <path fill="#9A9690" d="M775.18,907.85l-113.17-94.12-74.68,75.47c19.33,35.07,45.63,82.62,64.95,117.69,43.29-17.48,79.61-47.42,122.9-64.9v-34.14Z"/>
+        <path fill="#9A9690" d="M673.8,1045.36c5.31,19.79,10.63,39.59,15.94,59.38l26.95,17.3h163.36l26.95-17.3c5.31-19.79,10.63-39.59,15.94-59.38-41.52-9.7-83.05-19.4-124.57-29.09-41.52,9.7-83.05,19.4-124.57,29.09Z"/>
+        <polygon fill="#9A9690" points="943.66 806.35 1154.01 632.24 1092.57 567.02 942.17 640.37 943.66 806.35"/>
+        <path fill="#9A9690" d="M821.56,907.85v34.14c43.29,17.48,78.11,47.42,121.41,64.9,19.33-35.07,47.12-82.62,66.45-117.69l-74.68-75.47-113.17,94.12Z"/>
+      </svg>
+      <span>Jeeves &nbsp;·&nbsp; tryjeeves.com &nbsp;·&nbsp; Propuesta · Comfandi</span>
+    </div>
+    <div style="width:40px;height:1px;background:var(--black-4);"></div>
+    <div style="font-size:10px;letter-spacing:0.14em;color:var(--text-muted);opacity:0.6;">
+      Made by <span style="color:var(--gold);font-weight:700;opacity:1;">Jesús Irigoyen (Solutions Engineer)</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ──────────────────────────────────
+//  PRICING DATA
+// ──────────────────────────────────
+var TIERS = [
+  { max: 50,   mxn: 294.10, usd: 17.00 },
+  { max: 100,  mxn: 207.60, usd: 12.00 },
+  { max: 150,  mxn: 164.35, usd: 9.50  },
+  { max: Infinity, mxn: 138.40, usd: 8.00 }
+];
+var TIER_LABELS = ['Tier 1 · hasta 50 usuarios', 'Tier 2 · hasta 100 usuarios', 'Tier 3 · hasta 150 usuarios', 'Tier 4 · 200+ usuarios'];
+var PLATFORM_FEE_USD = 200;   // USD fijo mensual por plataforma
+var FF_PACKAGES = {
+  0:    { facturas: 0,    desc: 'Sin FotoFacturas adicionales' },
+  500:  { facturas: 500,  desc: 'Paquete 500 facturas extra' },
+  1000: { facturas: 1000, desc: 'Paquete 1,000 facturas extra' },
+  1500: { facturas: 1500, desc: 'Paquete 1,500 facturas extra' }
+};
+var FF_PRICE_MXN = 10; // $10 MXN por factura adicional
+var FF_BASE_FACTURAS = 200; // 200 fotofacturas incluidas en precio base (ocultas)
+
+var selectedFF = 0;
+var customFF   = 0; // FotoFacturas ingresadas manualmente por el cliente
+
+// ──────────────────────────────────
+//  FORMATTERS
+// ──────────────────────────────────
+function fmxn(n) {
+  return '$' + n.toLocaleString('es-MX', {minimumFractionDigits:0, maximumFractionDigits:0});
+}
+function fusd(n) {
+  return 'USD ' + n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
+}
+function fmxnD(n) {  // with decimals
+  return '$' + n.toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function fcop(n) {
+  return n.toLocaleString('es-CO', {minimumFractionDigits:0, maximumFractionDigits:0});
+}
+
+// ──────────────────────────────────
+//  SLIDER SYNC
+// ──────────────────────────────────
+function syncSlider() { /* removed */ }
+function syncInput() { /* removed */ }
+
+// ──────────────────────────────────
+//  TIER DETECTION
+// ──────────────────────────────────
+function getTier(n) {
+  for (var i = 0; i < TIERS.length; i++) {
+    if (n <= TIERS[i].max) return i;
+  }
+  return TIERS.length - 1;
+}
+
+function highlightTier(idx) {
+  var ids = ['tc1','tc2','tc3','tc4'];
+  ids.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (i === idx) {
+      el.classList.add('active-tier');
+    } else {
+      el.classList.remove('active-tier');
+    }
+  });
+}
+
+// ──────────────────────────────────
+//  FF SELECTION
+// ──────────────────────────────────
+function setFF(paq) {
+  selectedFF = paq;       // numeric: 0, 500, 1000, 1500
+  customFF   = 0;         // clear custom when package selected
+  ['ff_none','ff_500','ff_1000','ff_1500','ff_2000'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.classList.remove('selected');
+  });
+  var map = {'0':'ff_none', '500':'ff_500', '1000':'ff_1000', '1500':'ff_1500', '2000':'ff_2000'};
+  var target = document.getElementById(map[String(paq)]);
+  if (target) target.classList.add('selected');
+  recalc();
+}
+function selectFF(paq) { setFF(paq); }
+
+function clearCustomFF() {
+  var inp = document.getElementById('ff_custom');
+  if (inp) { inp.value = ''; }
+  var pr = document.getElementById('ff_custom_price');
+  if (pr) pr.textContent = '';
+  customFF = 0;
+}
+
+function applyCustomFF() {
+  var inp = document.getElementById('ff_custom');
+  var val = Math.max(0, parseInt(inp.value) || 0);
+  customFF   = val;
+  selectedFF = -1; // sentinel: bypass package lookup, use customFF
+  // Deselect all package buttons
+  ['ff_none','ff_500','ff_1000','ff_1500','ff_2000'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.classList.remove('selected');
+  });
+  // Show price preview next to field
+  var tdc    = parseFloat(document.getElementById('tdc').value) || 17.20;
+  var mxnMes = val * FF_PRICE_MXN;
+  var pr = document.getElementById('ff_custom_price');
+  if (pr) pr.textContent = val > 0 ? fmxn(mxnMes) + '/mes' : '';
+  recalc();
+}
+
+// ──────────────────────────────────
+//  MAIN RECALC
+// ──────────────────────────────────
+function recalc() {
+  var tdc   = parseFloat(document.getElementById('tdc').value) || 4200; // COP per USD
+  var platMesUSD = parseFloat(document.getElementById('costo_plataforma').value) || 1000; // USD/mes
+  var gastoMesCOP = parseFloat(document.getElementById('gasto_tarjetas').value) || 0; // COP
+  var gastoMesUSD = gastoMesCOP / tdc; // convertir a USD
+  var impuestoActivo = document.getElementById('impuesto_check').checked;
+  var cajeroActivo = document.getElementById('cajero_check').checked;
+  var cajMesCOP  = cajeroActivo ? (parseFloat(document.getElementById('gasto_cajeros').value) || 0) : 0; // COP
+  var cajMesUSD  = cajMesCOP / tdc; // convertir a USD
+  var comCaj   = cajeroActivo ? (parseFloat(document.getElementById('comision_caj').value) || 0) : 0;
+
+  // Tier 4 siempre activo
+  highlightTier(3);
+
+  // Update tier card display
+  var t4el = document.getElementById('t4_usd');
+  if (t4el) t4el.textContent = 'USD 8.00';
+
+  // Plataforma total — USD
+  var platAnoUSD = platMesUSD * 12;
+  var platAnoCOP = platAnoUSD * tdc;
+
+  // Total investment
+  var totalAnoUSD = platAnoUSD;
+  var totalAnoCOP = totalAnoUSD * tdc;
+  var totalMesUSD = platMesUSD;
+
+  // Hint anual
+  var hintEl = document.getElementById('hint_plat_ano');
+  if (hintEl) hintEl.textContent = fusd(platAnoUSD); // USD 1,073 × 12
+
+  // ── Savings ──
+  // Cashback 1% × 6 months (gasto in USD)
+  var cbUSD = gastoMesUSD * 0.01 * 6;
+  var cbCOP = cbUSD * tdc;
+
+  // Zero cashback if plan 500
+  var planActivo = parseInt(document.getElementById('costo_plataforma').value) || 1000;
+  if (planActivo !== 1000) { cbUSD = 0; cbCOP = 0; }
+
+  // Cajero savings (gasto in USD already)
+  var cajAnoUSD = cajMesUSD * (comCaj/100) * 12;
+  var cajAnoCOP = cajAnoUSD * tdc;
+
+
+  // Impuesto 4x1000 savings
+  var impAnoUSD = impuestoActivo ? (gastoMesUSD * 0.004 * 12) : 0;
+  var impAnoCOP = impAnoUSD * tdc;
+
+  // Neto
+  var totalSavingsUSD = cbUSD + cajAnoUSD + impAnoUSD;
+  var netoAnoUSD = totalAnoUSD - totalSavingsUSD;
+  var netoAnoCOP = netoAnoUSD * tdc;
+
+  // ROI
+  var roi = totalAnoUSD > 0 ? (totalSavingsUSD / totalAnoUSD) * 100 : 0;
+
+  // ── Update impuesto_valor display ──
+  var impMesCOP = gastoMesCOP * 0.004; // 0.4% = 4x1000
+  var impMesField = document.getElementById('impuesto_valor');
+  if (impMesField) impMesField.value = impMesCOP > 0 ? fcop(impMesCOP) : '0';
+
+  // ── Update gasto anual hint ──
+  document.getElementById('hint_gasto_anual').textContent =
+    gastoMesCOP > 0 ? 'Semestral: COP ' + fcop(gastoMesCOP * 6) : '';
+
+  // ── Update results ──
+
+  setText('res_plat_usd', fusd(platAnoUSD) + ' / año');
+  setText('res_plat_cop', '≈ COP ' + fcop(platAnoCOP) + ' / año');
+
+  setText('res_total_usd', fusd(totalAnoUSD) + ' / año');
+  setText('res_total_cop', '≈ COP ' + fcop(totalAnoCOP) + ' / año');
+
+  // Cashback row display
+  if (cbUSD > 0) {
+    show('res_cb_row');
+    setText('res_cb_usd', fusd(cbUSD));
+    setText('res_cb_cop', '≈ COP ' + fcop(cbCOP));
+  } else {
+    hide('res_cb_row');
+  }
+
+  // Cajero
+  if (cajeroActivo && cajAnoUSD > 0) {
+    show('res_caj_row');
+    document.getElementById('res_caj_label').textContent = 'Ahorro comisiones cajero (' + comCaj + '%)';
+    setText('res_caj_usd', fusd(cajAnoUSD));
+    setText('res_caj_cop', '≈ COP ' + fcop(cajAnoCOP));
+  } else {
+    hide('res_caj_row');
+  }
+
+
+  // Impuesto
+  if (impuestoActivo && impAnoUSD > 0) {
+    show('res_imp_row');
+    setText('res_imp_usd', fusd(impAnoUSD));
+    setText('res_imp_cop', '≈ COP ' + fcop(impAnoCOP));
+  } else {
+    hide('res_imp_row');
+  }
+
+  // Neto
+  var netoEl = document.getElementById('res_neto_usd2');
+  if (netoEl) {
+    netoEl.textContent = fusd(netoAnoUSD);
+    netoEl.style.color = netoAnoUSD <= 0 ? 'var(--green)' : 'var(--gold)';
+  }
+  setText('res_neto_cop', '≈ COP ' + fcop(netoAnoCOP));
+  setText('res_neto_usd', '≈ COP ' + fcop(netoAnoCOP));
+
+  // ROI
+  var roiEl = document.getElementById('res_roi');
+  if (totalAnoUSD > 0 && totalSavingsUSD > 0) {
+    roiEl.textContent = roi.toFixed(0) + '% de retorno';
+    roiEl.style.color = roi >= 100 ? 'var(--green)' : 'var(--gold)';
+    document.getElementById('roi_fill').style.width = Math.min(roi, 100) + '%';
+  } else {
+    roiEl.textContent = totalSavingsUSD > 0 ? '∞ ROI' : '—';
+    document.getElementById('roi_fill').style.width = '0%';
+  }
+
+  // Breakdown table (compatible layer)
+  setText('bt_users_mes', fusd(platMesUSD));
+  setText('bt_users_ano', fusd(platAnoUSD));
+  setText('bt_users_usd', fusd(platAnoUSD));
+  setText('bt_fee_mes', fusd(feeAnoUSD / 12));
+  setText('bt_fee_ano', fusd(feeAnoUSD));
+  setText('bt_fee_usd', fusd(feeAnoUSD));
+  setText('bt_plat_mes', fusd(platMesUSD));
+  setText('bt_plat_ano', fusd(platAnoUSD));
+  setText('bt_plat_usd', fusd(platAnoUSD));
+  setText('bt_cb_mes', fusd(cbUSD / 6));
+  setText('bt_cb_ano', '−' + fusd(cbUSD));
+  setText('bt_cb_usd', '−' + fusd(cbUSD));
+  setText('bt_neto_mes', fusd(netoAnoUSD / 12));
+  setText('bt_neto_ano', fusd(netoAnoUSD));
+  setText('bt_neto_usd', fusd(netoAnoUSD));
+} // end recalc
+
+function toggleCajero() {
+  var checked = document.getElementById('cajero_check').checked;
+  document.getElementById('cajero-fields').style.display = checked ? '' : 'none';
+  setTimeout(recalc, 0);
+}
+
+function toggleImpuesto() {
+  var checked = document.getElementById('impuesto_check').checked;
+  document.getElementById('impuesto-fields').style.display = checked ? '' : 'none';
+  setTimeout(recalc, 0);
+}
+
+function selectPlan(val) {
+  document.getElementById('costo_plataforma').value = val;
+  var p1 = document.getElementById('plan_1000');
+  var p2 = document.getElementById('plan_500');
+  if (val === 1000) {
+    p1.style.background = 'rgba(201,168,76,0.10)';
+    p1.style.border = '1.5px solid var(--gold)';
+    p1.querySelector('div').style.color = 'var(--gold)';
+    p2.style.background = 'var(--black-3)';
+    p2.style.border = '1.5px solid var(--black-4)';
+    p2.querySelector('div').style.color = 'var(--text-muted)';
+  } else {
+    p2.style.background = 'rgba(81,172,188,0.10)';
+    p2.style.border = '1.5px solid var(--pacific)';
+    p2.querySelector('div').style.color = 'var(--pacific)';
+    p1.style.background = 'var(--black-3)';
+    p1.style.border = '1.5px solid var(--black-4)';
+    p1.querySelector('div').style.color = 'var(--text-muted)';
+  }
+  recalc();
+}
+
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function show(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = '';
+}
+function hide(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+// ── Scroll reveals ──
+var reveals = document.querySelectorAll('.reveal');
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e, i) {
+    if (e.isIntersecting) {
+      setTimeout(function() { e.target.classList.add('visible'); }, i * 70);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(function(el) { obs.observe(el); });
+
+// ── Init ──
+recalc();
+
+// ── Tipo de cambio COP/USD en tiempo real — fuente: xe.com ──
+(function fetchTDC() {
+  var dot = document.getElementById('tdc-live-dot');
+
+  function applyRate(rate, source) {
+    var rounded = Math.round(rate);
+    document.getElementById('tdc').value = rounded;
+    if (dot) {
+      dot.style.background = 'var(--green)';
+      dot.style.boxShadow = '0 0 6px rgba(74,188,160,0.6)';
+      dot.style.animation = 'pulse 1.5s infinite';
+      dot.title = 'Tipo de cambio en vivo · ' + rounded + ' COP/USD · ' + source;
+    }
+    recalc();
+  }
+
+  function markError() {
+    if (dot) {
+      dot.style.background = 'var(--amber)';
+      dot.title = 'Sin conexión — valor manual';
+    }
+  }
+
+  // 1️⃣ Intentar con exchangerate-api (gratuito, sin key, CORS ok)
+  fetch('https://open.er-api.com/v6/latest/USD')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var rate = data && data.rates && data.rates.COP;
+      if (rate) { applyRate(rate, 'open.er-api.com'); return; }
+      throw new Error('no rate');
+    })
+    .catch(function() {
+      // 2️⃣ Fallback: frankfurter.app (Bundesbank data, CORS ok)
+      fetch('https://api.frankfurter.app/latest?from=USD&to=COP')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var rate = data && data.rates && data.rates.COP;
+          if (rate) { applyRate(rate, 'frankfurter.app'); return; }
+          throw new Error('no rate');
+        })
+        .catch(function() {
+          // 3️⃣ Fallback: fawazahmed0 (CDN, CORS ok)
+          fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              var rate = data && data.usd && data.usd.cop;
+              if (rate) { applyRate(rate, 'currency-api'); return; }
+              throw new Error('no rate');
+            })
+            .catch(markError);
+        });
+    });
+})();
+// Pre-select first exec card
+window.addEventListener('load', function() {
+  var card = document.querySelector('.exec-card');
+  if (card) { card.classList.add('selected'); }
+});
+</script>
+</body>
+</html>
